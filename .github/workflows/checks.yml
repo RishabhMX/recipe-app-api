@@ -1,3 +1,5 @@
+#Used to setup github actions
+
 ---
 name: Checks
 
@@ -23,6 +25,7 @@ jobs:
         uses: actions/checkout@v2
         #runs test
       - name: Test
-        run: docker-compose run --rm app sh -c "python manage.py test"        
+        run: docker-compose run --rm app sh -c "python manage.py test"
+        
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
