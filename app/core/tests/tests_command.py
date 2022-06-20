@@ -1,0 +1,34 @@
+""" Test custom Django management commands"""
+
+from unittest.mock import patch
+
+from psycopg2 import OperationalError as Psycopg2Error
+
+from django.core.management import call_command
+from django.db.utils import OperationalError
+from django.test import SimpleTestCase
+
+@patch('core.management.commands.wait_for_db.Command.check') #to mock the actions of the command
+class CommandTests(SimpleTestCase):
+    """ Test custom Django management commands"""
+    def test_wait_for_db_ready(self,patched_check): #patched_check is to indicate the mock
+        """Test waiting for database if database ready."""
+        patched_check.return_value=True #to mock the actions of the command 
+
+        call_command('wait_for_db')
+
+        patched_check.assert_called_once_with(database=['default']) #to mock the database
+    
+    @patch('time.sleep')
+    def test_wait_for_db_delay(self, patched_sleep, patched_check):
+        """Test waiting for database when getting OperationalError."""
+        patched_check.side_effect = [Psycopg2Error] * 2 + \ # so psycopg2 error is raised twice
+            [OperationalError] * 3 + [True]  #so OperationalError is raised thrice and then True
+
+        call_command('wait_for_db')
+
+        self.assertEqual(patched_check.call_count, 6)  #to check if all 6 exceptions occured
+        patched_check.assert_called_with(databases=['default'])
+
+
+
