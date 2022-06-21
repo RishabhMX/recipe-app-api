@@ -10,8 +10,11 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app      
+    #when app starts using docker-compose up, it will run the following command i.e to activate db,migrate, and the runserver
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db  &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
 
     #configures from db below
     environment:
