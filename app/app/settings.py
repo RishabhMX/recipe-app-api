@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'core',
+    'rest_framework',
+    'rest_framework.authtoken', #adds some additional migrations for more db space and tables
+    'drf_spectacular',
+    'user',
+
 ]
 
 MIDDLEWARE = [
@@ -130,3 +135,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'  #setting authorization to use User model
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema', #telling rest framework to generate schemas using openapi
+}
