@@ -47,5 +47,6 @@ class UserAdmin(BaseUserAdmin): #customising the admin
 
 
 admin.site.register(models.User,UserAdmin) #add UserAdmin or else django will use default model manager
+admin.site.register(models.Recipe)
 
 
