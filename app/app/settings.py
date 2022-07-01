@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken', #adds some additional migrations for more db space and tables
     'drf_spectacular',
     'user',
+    'recipe',
 
 ]
 

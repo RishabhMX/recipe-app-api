@@ -27,4 +27,5 @@ urlpatterns = [
     SpectacularSwaggerView.as_view(url_name='api-schema' ),  #to generate documentation using the schema provided above
     name = 'api-docs'), #using swagger to convert schema into document
     path('api/user/',include('user.urls')),
+    path('api/recipe/', include('recipe.urls')),
 ]
