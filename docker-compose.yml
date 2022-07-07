@@ -9,7 +9,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app      
+      - ./app:/app
+      - dev-static-data:/vol/web
     #when app starts using docker-compose up, it will run the following command i.e to activate db,migrate, and the runserver
     command: >
       sh -c "python manage.py wait_for_db  &&
@@ -24,21 +25,22 @@ services:
       - DB_PASS=changeme
       - DEBUG=1
 
-     #if db starts then only app starts 
+     #if db starts then only app starts
     depends_on:
       - db
 
-   #postgres database  
+   #postgres database
   db:
     image: postgres:13-alpine
     volumes:
       - dev-db-data:/var/lib/postgresql/data
 
-    #environment variables  
-    environment:      
+    #environment variables
+    environment:
       - POSTGRES_DB=devdb
       - POSTGRES_USER=devuser
       - POSTGRES_PASSWORD=changeme
 
 volumes:
   dev-db-data:
+  dev-static-data:

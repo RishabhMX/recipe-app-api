@@ -20,12 +20,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u%hh@y3!03x8!amzg^cabc#r4@s1rf1pky307c-78i@-aykxme'
+#SECRET_KEY = 'django-insecure-u%hh@y3!03x8!amzg^cabc#r4@s1rf1pky307c-78i@-aykxme'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme') #change me id default value
+#from env file
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = []
+#extending allowd_hosts functionality to support only specific hosts
+ALLOWED_HOSTS.extend(
+    filter(
+        None,
+        os.environ.get('ALLOWED_HOSTS', '').split(','),
+    )
+)
 
 
 # Application definition
@@ -128,7 +138,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/static/'
+MEDIA_URL='/static/media/'
+
+MEDIA_ROOT = 'vol/web/media'
+STATIC_ROOT = 'vol/web/static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -139,4 +153,9 @@ AUTH_USER_MODEL = 'core.User'  #setting authorization to use User model
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema', #telling rest framework to generate schemas using openapi
+}
+
+#to make image aapi work in swagger
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True,
 }
